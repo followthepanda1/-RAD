@@ -122,9 +122,16 @@ def get_response(msg):
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
         asyncio.run(main(), debug=True)
 
+#функция для передачи сообщений 
+def innpute_view(inpute):
+    resp = get_response(inpute)
+    print (resp)
+    return resp
+
 
 if __name__ == "__main__":
     print("Ожидаю ваш вопрос! (введите 'quit' чтобы выйти)")
+    innpute_view("длина экватора ?")
     while True:
         # sentence = "do you use credit cards?"
         sentence = input("Вы: ")
