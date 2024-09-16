@@ -19,5 +19,5 @@ from django.urls import path
 from main import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.Chat, 'chat')
+    path('', views.Chat.as_view(), name='chat'),
 ]
