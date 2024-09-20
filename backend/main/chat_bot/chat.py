@@ -4,10 +4,32 @@ import json
 import numpy as np
 import torch
 import asyncio
+import torch.nn as nn
 from g4f.client import Client
-from model import NeuralNet
 from pymorphy2 import MorphAnalyzer
 from nltk.tokenize import word_tokenize
+
+import os
+
+currently_path = os.path.dirname(os.path.abspath(__file__))
+class NeuralNet(nn.Module):
+    def __init__(self, input_size, hidden_size, num_classes):
+        super(NeuralNet, self).__init__()
+        self.l1 = nn.Linear(input_size, hidden_size) 
+        self.l2 = nn.Linear(hidden_size, hidden_size) 
+        self.l3 = nn.Linear(hidden_size, num_classes)
+        self.relu = nn.ReLU()
+    
+    def forward(self, x):
+        out = self.l1(x)
+        out = self.relu(out)
+        out = self.l2(out)
+        out = self.relu(out)
+        out = self.l3(out)
+        # no activation and no softmax at the end
+        return out
+
+
 
 # Инициализация морфологического анализатора
 morph = MorphAnalyzer()
@@ -40,11 +62,11 @@ def stem(word):
     return morph.parse(word)[0].normal_form
 
 # Загрузка данных из файла intentss.json
-with open('backend/main/chat_bot/intentss.json', 'r', encoding='utf-8') as f:
+with open(currently_path+'\intentss.json', 'r', encoding='utf-8') as f:
     intents = json.load(f)
 
 # Загрузка данных из файла data.pth
-FILE = "backend\main\chat_bot\data.pth"
+FILE = currently_path+"\data.pth"
 data = torch.load(FILE, map_location=torch.device('cpu'))
 
 # Определение размеров входных, скрытых и выходных слоев нейронной сети
@@ -72,7 +94,7 @@ model.eval()
 bot_name = "Sam"
 
 # Функция для получения ответа от бота
-def get_response(msg):
+def get_response_model(msg):
     # Токенизация входного сообщения
     sentence = tokenize(msg)
 
@@ -95,7 +117,7 @@ def get_response(msg):
     # Получение вероятности предсказанного тега
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
-
+    otvet = 'Нет связи с моделью'
     # Если вероятность предсказанного тега больше 0.75, возвращаем ответ из списка ответов
     if prob.item() > 0.75:
         for intent in intents['intents']:
@@ -103,41 +125,34 @@ def get_response(msg):
                 return random.choice(intent['responses'])
     # Иначе вызываем функцию main для генерации ответа с помощью модели GPT-3.5 Turbo
     else:
-        async def main():
-            client = Client()
-            try:
-                response = client.chat.completions.create(
+        client = Client()
+        try:
+            response = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[{"role": "user", "content": msg + " Ответьте на русском языке"}]
-                )
-                if response.choices and response.choices[0].message.content:
-                    otvet = (response.choices[0].message.content)
-                    print('---------------------')
-                    print(otvet)
-                    print('---------------------')
-                else:
-                    print("Нет ответа от модели")
-            except Exception as e:
-                print(f"Ошибка: {e}")
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-        asyncio.run(main(), debug=True)
+            )
+            if response.choices and response.choices[0].message.content:
+                otvet = (response.choices[0].message.content)
+                print('---------------------')
+                print(otvet)
+            else:
+                print("Нет ответа от модели")
+                return("Нет ответа от модели")
+        except Exception as e:
+            print(f"Ошибка: {e}")
+    return(otvet)
 
 #функция для передачи сообщений 
 def innpute_view(inpute):
-    resp = get_response(inpute)
+    resp = get_response_model(inpute)
     print (resp)
     return resp
 
 
-if __name__ == "__main__":
-    print("Ожидаю ваш вопрос! (введите 'quit' чтобы выйти)")
-    innpute_view("длина экватора ?")
-    while True:
-        # sentence = "do you use credit cards?"
-        sentence = input("Вы: ")
-        if sentence == "quit":
-            break
+# if __name__ == "__main__":
+#         # sentence = "do you use credit cards?"
+#     sentence = input("Вы: ")
 
-        resp = get_response(sentence)
-        print(resp)
+#     resp = get_response_model(sentence)
+#     print('main',resp)
 

@@ -8,7 +8,7 @@ from torch.utils.data import Dataset, DataLoader
 from nltk.tokenize import word_tokenize
 from pymorphy2 import MorphAnalyzer
 # from nltk_utils import bag_of_words, tokenize, stem
-from model import NeuralNet
+from backend.main.model import NeuralNet
 morph = MorphAnalyzer()
 def bag_of_words(tokenized_sentence, words):
     # stem each word
