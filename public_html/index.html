@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!--подключаем библиотеки-->
+    <script src="libs/btn/anim-menu-btn.min.js" defer></script>
+    <link rel="stylesheet" href="libs/swiper/swiper-bundle.min.css">
+    <script src="libs/swiper/swiper-bundle.min.js" defer></script>
+    <!--подключаем стили и скрипты-->
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/app.js" defer></script>
+</head>
+<body>
+    <div class="swiper slider">
+        <div class="slider-ui">
+            <!--меню-->
+            <div class="container header-wrapper">
+                <div class="top-line">
+                    <div class="row">
+                        <div class="col col--center">
+                            <a href="#" class="logo">
+                                VRAD
+                            </a>
+                        </div>
+                        <div class="col col--center col--right col--lead">
+                            <nav class="main-menu">
+                                <ul>
+                                    <li class="active"><a href="#">Главная</a></li>
+                                    <li><a href="#">Информация</a></li>
+                                    <li><a href="#">Контакты</a></li>
+                                </ul>
+                            </nav>
+                            <a href="#" class="button button--top">Присоединиться</a>
+                        </div>
+                        <div class="col col--center ">
+                            <button class="submenu anim-menu-btn">
+                                <i class="anim-menu-btn__icon anim-menu-btn__icon--close"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-content">
+
+                    <div class="header-content__slide active" >
+                        <h1 class="letters">VRAD</h1>
+                        <div class="header-content__info">
+                            <p>Под любым радианом</p><br>
+                            <button class="button button--main"> Присоединиться к нам</button>
+                        </div>
+                    </div>
+                      
+                </div>
+            </div>
+            
+        </div>
+        <!--вход-->
+        <div id="id01" class="modal">
+            
+        </div>
+
+        <!--слайдер-->
+        <div class="swiper-wrapper">
+            <div class="swiper-slide slider__item">
+                <div class="slider__layer" data-swiper-parallax="50%" style="background-image: url(img/slides/Background.jpg);"></div>
+                <div class="slider__layer" data-swiper-parallax="35%" style="background-image: url(img/slides/slide-2.png);"></div>
+            </div>
+            <div class="swiper-slide slider__item">
+                <div class="slider__layer" style="background-image: url(img/slides/header-bg.jpg);"></div>
+            </div>
+            <div class="swiper-slide slider__item">
+                <div class="slider__layer" style="background-image: url(img/slides/header-bg.jpg);"></div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
