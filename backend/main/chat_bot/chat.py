@@ -14,7 +14,7 @@ morph = MorphAnalyzer()
 
 # Определение устройства для работы с нейронной сетью (GPU или CPU)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+print(device)
 # Функция для создания мешка слов
 def bag_of_words(tokenized_sentence, words):
     # Приведение каждого слова к нормальной форме
@@ -40,12 +40,12 @@ def stem(word):
     return morph.parse(word)[0].normal_form
 
 # Загрузка данных из файла intentss.json
-with open('backend\main\chat_bot\intentss.json', 'r', encoding='utf-8') as f:
+with open('backend/main/chat_bot/intentss.json', 'r', encoding='utf-8') as f:
     intents = json.load(f)
 
 # Загрузка данных из файла data.pth
 FILE = "backend\main\chat_bot\data.pth"
-data = torch.load(FILE)
+data = torch.load(FILE, map_location=torch.device('cpu'))
 
 # Определение размеров входных, скрытых и выходных слоев нейронной сети
 input_size = data["input_size"]
